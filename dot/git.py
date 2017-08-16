@@ -26,8 +26,13 @@ class Git:
         already_has_managed_text = False
         managed_text = '### Managed by [dot](https://github.com/kylefrost/dot-cli)'
 
+        readme = None
         if os.path.exists('README.md'):
-            with open('README.md', 'r') as f:
+            readme = 'README.md'
+        elif os.path.exists('README'):
+            readme = 'README'
+        if readme:
+            with open(readme, 'r') as f:
                 for line in f:
                     if 'Managed by [dot]' in line:
                         already_has_managed_text = True
@@ -36,7 +41,7 @@ class Git:
                 if not already_has_managed_text:
                     readme.write('\n\n' + managed_text)
         else:
-            click.secho('No README.md file found in repo.', fg='yellow')
+            click.secho('No README.md or README file found in repo.', fg='yellow')
 
         return gclone
 
